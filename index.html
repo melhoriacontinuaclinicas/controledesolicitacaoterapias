@@ -46,7 +46,7 @@
             <div class="border-b border-slate-100 pb-6 mb-8">
                 <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Canal do Paciente</span>
                 <h2 class="text-2xl font-bold text-slate-900 mt-2">Solicitação de Marcação de Terapias</h2>
-                <p class="text-sm text-slate-500 mt-1">Preencha os dados do beneficiário e da solicitação abaixo.</p>
+                <p class="text-sm text-slate-500 mt-1">Preencha os dados do beneficiário, da consulta e selecione as terapias desejadas.</p>
             </div>
 
             <form id="solicitacaoForm" onsubmit="enviarFormulario(event)" class="space-y-8">
@@ -84,37 +84,52 @@
 
                 <!-- SEÇÃO: DADOS DA SOLICITAÇÃO -->
                 <div class="space-y-4">
-                    <h3 class="text-md font-bold text-blue-900 border-b pb-2">Dados da solicitação</h3>
+                    <h3 class="text-md font-bold text-blue-900 border-b pb-2">Dados da solicitação e consulta</h3>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Qual terapia deseja solicitar? *</label>
-                        <div class="space-y-2.5">
-                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
-                                <input type="radio" name="terapia" value="Psicologia" required class="text-blue-600 focus:ring-blue-500 h-4 w-4">
-                                <span class="ml-3 text-sm font-medium text-slate-700">Psicologia</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
-                                <input type="radio" name="terapia" value="Terapia Ocupacional" class="text-blue-600 focus:ring-blue-500 h-4 w-4">
-                                <span class="ml-3 text-sm font-medium text-slate-700">Terapia Ocupacional</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
-                                <input type="radio" name="terapia" value="Fisioterapia" class="text-blue-600 focus:ring-blue-500 h-4 w-4">
-                                <span class="ml-3 text-sm font-medium text-slate-700">Fisioterapia</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
-                                <input type="radio" name="terapia" value="Nutrição" class="text-blue-600 focus:ring-blue-500 h-4 w-4">
-                                <span class="ml-3 text-sm font-medium text-slate-700">Nutrição</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
-                                <input type="radio" name="terapia" value="Acupuntura" class="text-blue-600 focus:ring-blue-500 h-4 w-4">
-                                <span class="ml-3 text-sm font-medium text-slate-700">Acupuntura</span>
-                            </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Data da consulta marcada *</label>
+                            <input type="date" id="dataConsulta" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Nome do prestador *</label>
+                            <input type="text" id="nomePrestador" required placeholder="Ex: Dr(a). Nome do Médico" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">Senha de autorização do procedimento *</label>
-                        <input type="text" id="senha" required maxlength="9" placeholder="Insira no máximo 9 caracteres" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Local da marcação *</label>
+                        <input type="text" id="localMarcacao" required placeholder="Ex: Unidade Centro / Hospital X" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Quais terapias deseja solicitar? (Marque uma ou mais) *</label>
+                        <div class="space-y-2.5">
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
+                                <input type="checkbox" name="terapia" value="Psicologia" class="text-blue-600 focus:ring-blue-500 h-4 w-4 rounded">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Psicologia</span>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
+                                <input type="checkbox" name="terapia" value="Terapia Ocupacional" class="text-blue-600 focus:ring-blue-500 h-4 w-4 rounded">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Terapia Ocupacional</span>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
+                                <input type="checkbox" name="terapia" value="Fisioterapia" class="text-blue-600 focus:ring-blue-500 h-4 w-4 rounded">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Fisioterapia</span>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
+                                <input type="checkbox" name="terapia" value="Nutrição" class="text-blue-600 focus:ring-blue-500 h-4 w-4 rounded">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Nutrição</span>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
+                                <input type="checkbox" name="terapia" value="Acupuntura" class="text-blue-600 focus:ring-blue-500 h-4 w-4 rounded">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Acupuntura</span>
+                            </label>
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
+                                <input type="checkbox" name="terapia" value="Fonoaudiologia / Fonoterapia" class="text-blue-600 focus:ring-blue-500 h-4 w-4 rounded">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Fonoaudiologia / Fonoterapia</span>
+                            </label>
+                        </div>
                     </div>
 
                     <div>
@@ -162,7 +177,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
                     <div>
                         <h3 class="text-xl font-bold text-slate-900">Planilha de Solicitações (Nuvem)</h3>
-                        <p class="text-xs text-slate-500">Dados, senhas, anexos e status sincronizados em tempo real via Supabase</p>
+                        <p class="text-xs text-slate-500">Dados, consultas, anexos e status sincronizados em tempo real via Supabase</p>
                     </div>
                     <div class="flex items-center space-x-2">
                         <button onclick="exportarCSV()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-sm font-semibold transition flex items-center space-x-1.5">
@@ -180,13 +195,12 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-                                <th class="p-3 font-semibold">Data/Hora</th>
+                                <th class="p-3 font-semibold">Enviado em</th>
                                 <th class="p-3 font-semibold">Beneficiário</th>
                                 <th class="p-3 font-semibold">Carteirinha</th>
-                                <th class="p-3 font-semibold">Contatos</th>
-                                <th class="p-3 font-semibold">E-mail</th>
-                                <th class="p-3 font-semibold">Terapia</th>
-                                <th class="p-3 font-semibold">Senha Autorização</th>
+                                <th class="p-3 font-semibold">Contatos / E-mail</th>
+                                <th class="p-3 font-semibold">Consulta / Prestador / Local</th>
+                                <th class="p-3 font-semibold">Terapias</th>
                                 <th class="p-3 font-semibold">Observações</th>
                                 <th class="p-3 font-semibold">Anexo</th>
                                 <th class="p-3 font-semibold text-center">Status</th>
@@ -238,15 +252,19 @@
             const tel1 = document.getElementById('tel1').value;
             const tel2 = document.getElementById('tel2').value;
             const email = document.getElementById('email').value;
-            const terapiaElement = document.querySelector('input[name="terapia"]:checked');
-            const senha = document.getElementById('senha').value;
+            const dataConsulta = document.getElementById('dataConsulta').value;
+            const nomePrestador = document.getElementById('nomePrestador').value;
+            const localMarcacao = document.getElementById('localMarcacao').value;
             const observacoes = document.getElementById('observacoes').value;
             const fileInput = document.getElementById('arquivoAnexo');
 
-            if (!terapiaElement) {
-                alert('Por favor, selecione uma terapia.');
+            // Capturar checkboxes marcados
+            const checkboxes = document.querySelectorAll('input[name="terapia"]:checked');
+            if (checkboxes.length === 0) {
+                alert('Por favor, selecione ao menos uma terapia.');
                 return;
             }
+            const terapiasSelecionadas = Array.from(checkboxes).map(cb => cb.value).join(', ');
 
             const btnSubmit = document.getElementById('btnSubmit');
             btnSubmit.disabled = true;
@@ -272,8 +290,10 @@
                     telefone1: tel1, 
                     telefone2: tel2, 
                     email: email, 
-                    terapia: terapiaElement.value, 
-                    senha_autorizacao: senha,
+                    data_consulta: dataConsulta,
+                    nome_prestador: nomePrestador,
+                    local_marcacao: localMarcacao,
+                    terapia: terapiasSelecionadas, 
                     observacoes: observacoes,
                     anexo_nome: anexoNome,
                     anexo_dados: anexoDados,
@@ -334,7 +354,7 @@
 
         async function carregarDadosSupabase() {
             const tabelaCorpo = document.getElementById('tabelaCorpo');
-            tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-slate-400">Carregando dados da nuvem...</td></tr>`;
+            tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Carregando dados da nuvem...</td></tr>`;
 
             const { data, error } = await _supabase
                 .from('solicitacoes_terapias')
@@ -342,7 +362,7 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase. Verifique a conexão.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase. Verifique a conexão.</td></tr>`;
                 console.error(error);
                 return;
             }
@@ -350,7 +370,7 @@
             dadosGlobais = data || [];
 
             if (dadosGlobais.length === 0) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
                 return;
             }
 
@@ -371,16 +391,18 @@
                     </a>`;
                 }
 
+                // Formatar data da consulta se existir
+                let dataConsultaFmt = item.data_consulta ? item.data_consulta.split('-').reverse().join('/') : '-';
+
                 const linha = document.createElement('tr');
                 linha.className = "hover:bg-slate-50 transition border-b border-slate-100";
                 linha.innerHTML = `
                     <td class="p-3 text-xs text-slate-500">${dataFormatada}</td>
                     <td class="p-3 font-semibold text-slate-900">${item.nome_paciente}</td>
                     <td class="p-3">${item.convenio}</td>
-                    <td class="p-3 text-xs">${item.telefone1} ${item.telefone2 ? '<br>' + item.telefone2 : ''}</td>
-                    <td class="p-3 text-xs text-slate-600">${item.email}</td>
-                    <td class="p-3"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia}</span></td>
-                    <td class="p-3 font-mono text-xs font-bold text-slate-800">${item.senha_autorizacao || '-'}</td>
+                    <td class="p-3 text-xs">${item.telefone1} ${item.telefone2 ? '<br>' + item.telefone2 : ''}<br><span class="text-slate-500">${item.email}</span></td>
+                    <td class="p-3 text-xs">📅 ${dataConsultaFmt}<br>🩺 ${item.nome_prestador || '-'}<br>📍 ${item.local_marcacao || '-'}</td>
+                    <td class="p-3"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia || '-'}</span></td>
                     <td class="p-3 text-xs text-slate-600 max-w-[150px] truncate" title="${item.observacoes || ''}">${item.observacoes || '-'}</td>
                     <td class="p-3">${anexoHtml}</td>
                     <td class="p-3 text-center">
@@ -402,7 +424,7 @@
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,ID,Data/Hora,Beneficiario,Carteirinha,Telefone1,Telefone2,Email,Terapia,SenhaAutorizacao,Observacoes,Status\n";
+            let csvContent = "data:text/csv;charset=utf-8,ID,EnviadoEm,Beneficiario,Carteirinha,Telefone1,Telefone2,Email,DataConsulta,Prestador,LocalMarcacao,Terapias,Observacoes,Status\n";
 
             dadosGlobais.forEach(item => {
                 const row = [
@@ -413,8 +435,10 @@
                     `"${item.telefone1 || ''}"`,
                     `"${item.telefone2 || ''}"`,
                     `"${item.email || ''}"`,
-                    `"${item.terapia || ''}"`,
-                    `"${item.senha_autorizacao || ''}"`,
+                    `"${item.data_consulta || ''}"`,
+                    `"${(item.nome_prestador || '').replace(/"/g, '""')}"`,
+                    `"${(item.local_marcacao || '').replace(/"/g, '""')}"`,
+                    `"${(item.terapia || '').replace(/"/g, '""')}"`,
                     `"${(item.observacoes || '').replace(/"/g, '""')}"`,
                     `"${item.status || 'Pendente'}"`
                 ];
