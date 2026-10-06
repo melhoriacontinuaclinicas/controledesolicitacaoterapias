@@ -14,7 +14,7 @@
 <body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen text-slate-800 flex flex-col">
 
     <!-- Header / Navegação -->
-    <header class="bg-white/90 backdrop-blur-md shadow-sm border-b border-blue-100 sticky top-0 z-50">
+    <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-blue-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md">
@@ -28,10 +28,10 @@
                 </div>
             </div>
             <div class="flex space-x-2">
-                <button type="button" onclick="switchTab('form')" id="btn-form" class="px-4 py-2 text-sm font-semibold rounded-lg transition bg-blue-600 text-white shadow-sm cursor-pointer">
+                <button onclick="switchTab('form')" id="btn-form" class="px-4 py-2 text-sm font-semibold rounded-lg transition bg-blue-600 text-white shadow-sm">
                     Novo Formulário
                 </button>
-                <button type="button" onclick="switchTab('admin')" id="btn-admin" class="px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer">
+                <button onclick="switchTab('admin')" id="btn-admin" class="px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200">
                     Área da Clínica (Painel)
                 </button>
             </div>
@@ -46,7 +46,7 @@
             <div class="border-b border-slate-100 pb-6 mb-8">
                 <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Canal do Paciente</span>
                 <h2 class="text-2xl font-bold text-slate-900 mt-2">Solicitação de Marcação de Terapias</h2>
-                <p class="text-sm text-slate-500 mt-1">Preencha os dados do beneficiário e selecione as terapias desejadas.</p>
+                <p class="text-sm text-slate-500 mt-1">Preencha os dados do beneficiário, da consulta e selecione as terapias desejadas.</p>
             </div>
 
             <form id="solicitacaoForm" onsubmit="enviarFormulario(event)" class="space-y-8">
@@ -57,12 +57,12 @@
                     
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Nome do beneficiário *</label>
-                        <input type="text" id="nome" required placeholder="Nome completo" oninput="this.value = this.value.toUpperCase()" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 uppercase transition">
+                        <input type="text" id="nome" required placeholder="Nome completo" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Número da carteirinha *</label>
-                        <input type="text" id="convenio" required placeholder="Insira o número da carteirinha do convênio" oninput="this.value = this.value.toUpperCase()" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 uppercase transition">
+                        <input type="text" id="convenio" required placeholder="Insira o número da carteirinha do convênio" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -84,7 +84,23 @@
 
                 <!-- SEÇÃO: DADOS DA SOLICITAÇÃO -->
                 <div class="space-y-4">
-                    <h3 class="text-md font-bold text-blue-900 border-b pb-2">Dados da solicitação</h3>
+                    <h3 class="text-md font-bold text-blue-900 border-b pb-2">Dados da solicitação e consulta</h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Data da consulta marcada *</label>
+                            <input type="date" id="dataConsulta" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Nome do prestador *</label>
+                            <input type="text" id="nomePrestador" required placeholder="Ex: Dr(a). Nome do Médico" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Local da marcação *</label>
+                        <input type="text" id="localMarcacao" required placeholder="Ex: Unidade Centro / Hospital X" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition">
+                    </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Quais terapias deseja solicitar? (Marque uma ou mais) *</label>
@@ -118,7 +134,7 @@
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Observações</label>
-                        <textarea id="observacoes" rows="3" placeholder="Informações complementares, justificativas ou orientações relevantes à solicitação." oninput="this.value = this.value.toUpperCase()" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 uppercase transition"></textarea>
+                        <textarea id="observacoes" rows="3" placeholder="Informações complementares, justificativas ou orientações relevantes à solicitação." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 transition"></textarea>
                     </div>
 
                     <div>
@@ -128,7 +144,7 @@
                     </div>
                 </div>
 
-                <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl shadow-lg shadow-blue-600/30 transition duration-200 flex items-center justify-center space-x-2 cursor-pointer">
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl shadow-lg shadow-blue-600/30 transition duration-200 flex items-center justify-center space-x-2">
                     <span>Enviar Solicitação</span>
                 </button>
             </form>
@@ -139,7 +155,7 @@
         </div>
 
         <!-- ABA 2: PAINEL DA CLÍNICA (PROTEGIDO POR SENHA) -->
-        <div id="tab-admin" class="hidden space-y-6 w-full">
+        <div id="tab-admin" class="hidden space-y-6">
             <!-- Tela de Login -->
             <div id="admin-login" class="bg-white rounded-2xl shadow-xl border border-blue-100 p-8 max-w-md mx-auto text-center">
                 <div class="bg-blue-100 text-blue-800 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -149,9 +165,9 @@
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-2">Acesso Restrito à Clínica</h3>
                 <p class="text-sm text-slate-500 mb-6">Insira a senha administrativa para visualizar o painel e os indicadores.</p>
-                <form id="loginForm" onsubmit="verificarSenhaAdmin(event)" class="space-y-4">
+                <form onsubmit="verificarSenhaAdmin(event)" class="space-y-4">
                     <input type="password" id="adminPasswordInput" required placeholder="Senha da clínica" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 text-center">
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl shadow transition cursor-pointer">Entrar no Painel</button>
+                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl shadow transition">Entrar no Painel</button>
                     <p id="loginError" class="text-xs text-rose-600 hidden font-medium">Senha incorreta. Tente novamente.</p>
                 </form>
             </div>
@@ -162,19 +178,19 @@
                 <!-- Sub-navegação do Painel (Planilha vs BI Gerencial) -->
                 <div class="flex justify-between items-center bg-white p-3 rounded-2xl shadow-sm border border-blue-100">
                     <div class="flex space-x-2">
-                        <button type="button" onclick="switchAdminSubTab('tabela')" id="subbtn-tabela" class="px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm cursor-pointer">
+                        <button onclick="switchAdminSubTab('tabela')" id="subbtn-tabela" class="px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm">
                             📊 Planilha de Solicitações
                         </button>
-                        <button type="button" onclick="switchAdminSubTab('bi')" id="subbtn-bi" class="px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer">
+                        <button onclick="switchAdminSubTab('bi')" id="subbtn-bi" class="px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200">
                             📈 BI Gerencial / Indicadores
                         </button>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button type="button" onclick="exportarCSV()" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition flex items-center space-x-1 cursor-pointer">
+                        <button onclick="exportarCSV()" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition flex items-center space-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                             <span>Exportar CSV</span>
                         </button>
-                        <button type="button" onclick="carregarDadosSupabase()" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition flex items-center space-x-1 cursor-pointer">
+                        <button onclick="carregarDadosSupabase()" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition flex items-center space-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             <span>Atualizar</span>
                         </button>
@@ -183,26 +199,23 @@
 
                 <!-- SUB-ABA A: PLANILHA DE DADOS -->
                 <div id="subtab-tabela" class="bg-white rounded-2xl shadow-xl border border-blue-100 p-6 overflow-hidden w-full">
-                    <div class="mb-4 pb-3 border-b border-slate-100 flex justify-between items-center">
-                        <div>
-                            <h3 class="text-lg font-bold text-slate-900">Planilha de Solicitações na Nuvem</h3>
-                            <p class="text-xs text-slate-500">A clínica pode preencher o Prestador, Local (em maiúsculas) e alterar o Status diretamente na tabela</p>
-                        </div>
+                    <div class="mb-4 pb-3 border-b border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-900">Planilha de Solicitações na Nuvem</h3>
+                        <p class="text-xs text-slate-500">Dados, consultas, anexos e alteração de status em tempo real</p>
                     </div>
                     <div class="overflow-x-auto w-full">
-                        <table class="w-full text-left border-collapse min-w-[1200px]">
+                        <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-                                    <th class="p-4 font-semibold">Enviado em</th>
-                                    <th class="p-4 font-semibold">Beneficiário</th>
-                                    <th class="p-4 font-semibold">Carteirinha</th>
-                                    <th class="p-4 font-semibold">Contatos / E-mail</th>
-                                    <th class="p-4 font-semibold">Terapias</th>
-                                    <th class="p-4 font-semibold w-72">🩺 Nome do Prestador</th>
-                                    <th class="p-4 font-semibold w-72">📍 Local</th>
-                                    <th class="p-4 font-semibold">Observações</th>
-                                    <th class="p-4 font-semibold">Anexo</th>
-                                    <th class="p-4 font-semibold text-center">Status</th>
+                                    <th class="p-3.5 font-semibold">Enviado em</th>
+                                    <th class="p-3.5 font-semibold">Beneficiário</th>
+                                    <th class="p-3.5 font-semibold">Carteirinha</th>
+                                    <th class="p-3.5 font-semibold">Contatos / E-mail</th>
+                                    <th class="p-3.5 font-semibold">Consulta / Prestador / Local</th>
+                                    <th class="p-3.5 font-semibold">Terapias</th>
+                                    <th class="p-3.5 font-semibold">Observações</th>
+                                    <th class="p-3.5 font-semibold">Anexo</th>
+                                    <th class="p-3.5 font-semibold text-center">Status</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelaCorpo" class="divide-y divide-slate-100 text-sm text-slate-700">
@@ -283,7 +296,6 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const SENHA_CLINICA = 'clinica123';
         let dadosGlobais = [];
-        let isAdminLoggedIn = false;
 
         function switchTab(tab) {
             const formTab = document.getElementById('tab-form');
@@ -294,22 +306,13 @@
             if (tab === 'form') {
                 formTab.classList.remove('hidden');
                 adminTab.classList.add('hidden');
-                btnForm.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-blue-600 text-white shadow-sm cursor-pointer";
-                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer";
+                btnForm.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-blue-600 text-white shadow-sm";
+                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200";
             } else {
                 formTab.classList.add('hidden');
                 adminTab.classList.remove('hidden');
-                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-blue-600 text-white shadow-sm cursor-pointer";
-                btnForm.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer";
-
-                // Se já estiver logado, exibe o conteúdo direto; senão, mostra a tela de login
-                if (isAdminLoggedIn) {
-                    document.getElementById('admin-login').classList.add('hidden');
-                    document.getElementById('admin-content').classList.remove('hidden');
-                } else {
-                    document.getElementById('admin-login').classList.remove('hidden');
-                    document.getElementById('admin-content').classList.add('hidden');
-                }
+                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-blue-600 text-white shadow-sm";
+                btnForm.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200";
             }
         }
 
@@ -322,13 +325,13 @@
             if (subtab === 'tabela') {
                 tabTabela.classList.remove('hidden');
                 tabBi.classList.add('hidden');
-                btnTabela.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm cursor-pointer";
-                btnBi.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer";
+                btnTabela.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm";
+                btnBi.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200";
             } else {
                 tabTabela.classList.add('hidden');
                 tabBi.classList.remove('hidden');
-                btnBi.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm cursor-pointer";
-                btnTabela.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer";
+                btnBi.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm";
+                btnTabela.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200";
                 atualizarBI();
             }
         }
@@ -336,12 +339,15 @@
         async function enviarFormulario(event) {
             event.preventDefault();
 
-            const nome = document.getElementById('nome').value.toUpperCase();
-            const convenio = document.getElementById('convenio').value.toUpperCase();
+            const nome = document.getElementById('nome').value;
+            const convenio = document.getElementById('convenio').value;
             const tel1 = document.getElementById('tel1').value;
             const tel2 = document.getElementById('tel2').value;
             const email = document.getElementById('email').value;
-            const observacoes = document.getElementById('observacoes').value.toUpperCase();
+            const dataConsulta = document.getElementById('dataConsulta').value;
+            const nomePrestador = document.getElementById('nomePrestador').value;
+            const localMarcacao = document.getElementById('localMarcacao').value;
+            const observacoes = document.getElementById('observacoes').value;
             const fileInput = document.getElementById('arquivoAnexo');
 
             const checkboxes = document.querySelectorAll('input[name="terapia"]:checked');
@@ -375,13 +381,14 @@
                     telefone1: tel1, 
                     telefone2: tel2, 
                     email: email, 
+                    data_consulta: dataConsulta,
+                    nome_prestador: nomePrestador,
+                    local_marcacao: localMarcacao,
                     terapia: terapiasSelecionadas, 
                     observacoes: observacoes,
                     anexo_nome: anexoNome,
                     anexo_dados: anexoDados,
-                    status: 'Pendente',
-                    nome_prestador: '',
-                    local_marcacao: ''
+                    status: 'Pendente'
                 };
 
                 const { error } = await _supabase.from('solicitacoes_terapias').insert([payload]);
@@ -406,7 +413,6 @@
             const erroEl = document.getElementById('loginError');
 
             if (senhaDigitada === SENHA_CLINICA) {
-                isAdminLoggedIn = true;
                 document.getElementById('admin-login').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
                 erroEl.classList.add('hidden');
@@ -415,19 +421,6 @@
                 erroEl.classList.remove('hidden');
             }
             return false;
-        }
-
-        async function atualizarCampo(id, campo, valor) {
-            const valorMaiusculo = valor.toUpperCase();
-            const { error } = await _supabase
-                .from('solicitacoes_terapias')
-                .update({ [campo]: valorMaiusculo })
-                .eq('id', id);
-
-            if (error) {
-                alert('Erro ao salvar alteração.');
-                console.error(error);
-            }
         }
 
         async function atualizarStatus(id, novoStatus) {
@@ -439,13 +432,15 @@
             if (error) {
                 alert('Erro ao atualizar o status.');
                 console.error(error);
+                carregarDadosSupabase();
+            } else {
+                carregarDadosSupabase();
             }
-            carregarDadosSupabase();
         }
 
         async function carregarDadosSupabase() {
             const tabelaCorpo = document.getElementById('tabelaCorpo');
-            tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-slate-400">Carregando dados da nuvem...</td></tr>`;
+            tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Carregando dados da nuvem...</td></tr>`;
 
             const { data, error } = await _supabase
                 .from('solicitacoes_terapias')
@@ -453,7 +448,7 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase.</td></tr>`;
                 console.error(error);
                 return;
             }
@@ -461,7 +456,7 @@
             dadosGlobais = data || [];
 
             if (dadosGlobais.length === 0) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
                 atualizarBI();
                 return;
             }
@@ -479,29 +474,26 @@
                 if (item.anexo_nome && item.anexo_dados) {
                     anexoHtml = `<a href="${item.anexo_dados}" download="${item.anexo_nome}" class="text-blue-600 hover:underline text-xs font-semibold flex items-center space-x-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
-                        <span class="truncate max-w-[100px]" title="${item.anexo_nome}">${item.anexo_nome}</span>
+                        <span class="truncate max-w-[120px]" title="${item.anexo_nome}">${item.anexo_nome}</span>
                     </a>`;
                 }
+
+                let dataConsultaFmt = item.data_consulta ? item.data_consulta.split('-').reverse().join('/') : '-';
 
                 const linha = document.createElement('tr');
                 linha.className = "hover:bg-slate-50 transition border-b border-slate-100";
                 linha.innerHTML = `
-                    <td class="p-4 text-xs text-slate-500 whitespace-nowrap">${dataFormatada}</td>
-                    <td class="p-4 font-semibold text-slate-950">${item.nome_paciente || ''}</td>
-                    <td class="p-4">${item.convenio || ''}</td>
-                    <td class="p-4 text-xs">${item.telefone1 || ''} ${item.telefone2 ? '<br>' + item.telefone2 : ''}<br><span class="text-slate-500">${item.email || ''}</span></td>
-                    <td class="p-4"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia || '-'}</span></td>
-                    <td class="p-4">
-                        <input type="text" value="${item.nome_prestador || ''}" placeholder="DIGITAR PRESTADOR..." oninput="this.value = this.value.toUpperCase()" onblur="atualizarCampo('${item.id}', 'nome_prestador', this.value)" class="w-full min-w-[260px] px-3.5 py-2.5 text-xs uppercase font-medium rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition shadow-sm">
-                    </td>
-                    <td class="p-4">
-                        <input type="text" value="${item.local_marcacao || ''}" placeholder="DIGITAR LOCAL..." oninput="this.value = this.value.toUpperCase()" onblur="atualizarCampo('${item.id}', 'local_marcacao', this.value)" class="w-full min-w-[260px] px-3.5 py-2.5 text-xs uppercase font-medium rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition shadow-sm">
-                    </td>
-                    <td class="p-4 text-xs text-slate-600 max-w-[150px] truncate" title="${item.observacoes || ''}">${item.observacoes || '-'}</td>
-                    <td class="p-4">${anexoHtml}</td>
-                    <td class="p-4 text-center">
+                    <td class="p-3.5 text-xs text-slate-500">${dataFormatada}</td>
+                    <td class="p-3.5 font-semibold text-slate-900">${item.nome_paciente}</td>
+                    <td class="p-3.5">${item.convenio}</td>
+                    <td class="p-3.5 text-xs">${item.telefone1} ${item.telefone2 ? '<br>' + item.telefone2 : ''}<br><span class="text-slate-500">${item.email}</span></td>
+                    <td class="p-3.5 text-xs">📅 ${dataConsultaFmt}<br>🩺 ${item.nome_prestador || '-'}<br>📍 ${item.local_marcacao || '-'}</td>
+                    <td class="p-3.5"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia || '-'}</span></td>
+                    <td class="p-3.5 text-xs text-slate-600 max-w-[180px] truncate" title="${item.observacoes || ''}">${item.observacoes || '-'}</td>
+                    <td class="p-3.5">${anexoHtml}</td>
+                    <td class="p-3.5 text-center">
                         <select onchange="atualizarStatus('${item.id}', this.value)" 
-                            class="text-xs font-bold px-3 py-2 rounded-xl border focus:outline-none transition shadow-sm ${selectBg}">
+                            class="text-xs font-bold px-3 py-1.5 rounded-lg border focus:outline-none transition ${selectBg}">
                             <option value="Pendente" ${statusAtual === 'Pendente' ? 'selected' : ''}>Pendente</option>
                             <option value="Em tratativa" ${statusAtual === 'Em tratativa' ? 'selected' : ''}>Em tratativa</option>
                             <option value="Concluido" ${statusAtual === 'Concluido' ? 'selected' : ''}>Concluído</option>
@@ -560,7 +552,7 @@
             // Contar Prestadores
             const contadorPrestadores = {};
             dadosGlobais.forEach(item => {
-                if (item.nome_prestador && item.nome_prestador.trim() !== '') {
+                if (item.nome_prestador) {
                     const p = item.nome_prestador.trim();
                     contadorPrestadores[p] = (contadorPrestadores[p] || 0) + 1;
                 }
@@ -569,13 +561,13 @@
             const biPrestadoresDiv = document.getElementById('bi-prestadores-chart');
             biPrestadoresDiv.innerHTML = '';
             if (Object.keys(contadorPrestadores).length === 0) {
-                biPrestadoresDiv.innerHTML = '<p class="text-xs text-slate-400">Nenhum prestador preenchido na planilha ainda.</p>';
+                biPrestadoresDiv.innerHTML = '<p class="text-xs text-slate-400">Nenhum dado registrado.</p>';
             } else {
                 for (const [prestador, qtd] of Object.entries(contadorPrestadores)) {
                     biPrestadoresDiv.innerHTML += `
                         <div class="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
                             <span class="font-semibold text-slate-800">🩺 ${prestador}</span>
-                            <span class="bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded-lg">${qtd} atendimento(s)</span>
+                            <span class="bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded-lg">${qtd} solicitação(ões)</span>
                         </div>
                     `;
                 }
@@ -588,7 +580,7 @@
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,ID,EnviadoEm,Beneficiario,Carteirinha,Telefone1,Telefone2,Email,Terapias,Prestador,Local,Observacoes,Status\n";
+            let csvContent = "data:text/csv;charset=utf-8,ID,EnviadoEm,Beneficiario,Carteirinha,Telefone1,Telefone2,Email,DataConsulta,Prestador,LocalMarcacao,Terapias,Observacoes,Status\n";
 
             dadosGlobais.forEach(item => {
                 const row = [
@@ -599,9 +591,10 @@
                     `"${item.telefone1 || ''}"`,
                     `"${item.telefone2 || ''}"`,
                     `"${item.email || ''}"`,
-                    `"${(item.terapia || '').replace(/"/g, '""')}"`,
+                    `"${item.data_consulta || ''}"`,
                     `"${(item.nome_prestador || '').replace(/"/g, '""')}"`,
                     `"${(item.local_marcacao || '').replace(/"/g, '""')}"`,
+                    `"${(item.terapia || '').replace(/"/g, '""')}"`,
                     `"${(item.observacoes || '').replace(/"/g, '""')}"`,
                     `"${item.status || 'Pendente'}"`
                 ];
