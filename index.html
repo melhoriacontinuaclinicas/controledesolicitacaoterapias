@@ -164,7 +164,7 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-2">Acesso Restrito à Clínica</h3>
-                <p class="text-sm text-slate-500 mb-6">Insira a senha administrativa para visualizar as solicitações recebidas.</p>
+                <p class="text-sm text-slate-500 mb-6">Insira a senha administrativa para visualizar o painel e os indicadores.</p>
                 <form onsubmit="verificarSenhaAdmin(event)" class="space-y-4">
                     <input type="password" id="adminPasswordInput" required placeholder="Senha da clínica" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 text-center">
                     <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl shadow transition">Entrar no Painel</button>
@@ -172,45 +172,117 @@
                 </form>
             </div>
 
-            <!-- Tabela de Dados (Visível após autenticação) -->
-            <div id="admin-content" class="hidden bg-white rounded-2xl shadow-xl border border-blue-100 p-6 overflow-hidden w-full">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-900">Planilha de Solicitações (Nuvem)</h3>
-                        <p class="text-xs text-slate-500">Dados, consultas, anexos e status sincronizados em tempo real via Supabase</p>
+            <!-- Conteúdo do Painel (Visível após autenticação) -->
+            <div id="admin-content" class="hidden space-y-6 w-full">
+                
+                <!-- Sub-navegação do Painel (Planilha vs BI Gerencial) -->
+                <div class="flex justify-between items-center bg-white p-3 rounded-2xl shadow-sm border border-blue-100">
+                    <div class="flex space-x-2">
+                        <button onclick="switchAdminSubTab('tabela')" id="subbtn-tabela" class="px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm">
+                            📊 Planilha de Solicitações
+                        </button>
+                        <button onclick="switchAdminSubTab('bi')" id="subbtn-bi" class="px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                            📈 BI Gerencial / Indicadores
+                        </button>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="exportarCSV()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-sm font-semibold transition flex items-center space-x-1.5">
+                        <button onclick="exportarCSV()" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition flex items-center space-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                             <span>Exportar CSV</span>
                         </button>
-                        <button onclick="carregarDadosSupabase()" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-semibold transition flex items-center space-x-1.5">
+                        <button onclick="carregarDadosSupabase()" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition flex items-center space-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             <span>Atualizar</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="overflow-x-auto w-full">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-                                <th class="p-3.5 font-semibold">Enviado em</th>
-                                <th class="p-3.5 font-semibold">Beneficiário</th>
-                                <th class="p-3.5 font-semibold">Carteirinha</th>
-                                <th class="p-3.5 font-semibold">Contatos / E-mail</th>
-                                <th class="p-3.5 font-semibold">Consulta / Prestador / Local</th>
-                                <th class="p-3.5 font-semibold">Terapias</th>
-                                <th class="p-3.5 font-semibold">Observações</th>
-                                <th class="p-3.5 font-semibold">Anexo</th>
-                                <th class="p-3.5 font-semibold text-center">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaCorpo" class="divide-y divide-slate-100 text-sm text-slate-700">
-                            <!-- Preenchido via JavaScript -->
-                        </tbody>
-                    </table>
+                <!-- SUB-ABA A: PLANILHA DE DADOS -->
+                <div id="subtab-tabela" class="bg-white rounded-2xl shadow-xl border border-blue-100 p-6 overflow-hidden w-full">
+                    <div class="mb-4 pb-3 border-b border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-900">Planilha de Solicitações na Nuvem</h3>
+                        <p class="text-xs text-slate-500">Dados, consultas, anexos e alteração de status em tempo real</p>
+                    </div>
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
+                                    <th class="p-3.5 font-semibold">Enviado em</th>
+                                    <th class="p-3.5 font-semibold">Beneficiário</th>
+                                    <th class="p-3.5 font-semibold">Carteirinha</th>
+                                    <th class="p-3.5 font-semibold">Contatos / E-mail</th>
+                                    <th class="p-3.5 font-semibold">Consulta / Prestador / Local</th>
+                                    <th class="p-3.5 font-semibold">Terapias</th>
+                                    <th class="p-3.5 font-semibold">Observações</th>
+                                    <th class="p-3.5 font-semibold">Anexo</th>
+                                    <th class="p-3.5 font-semibold text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaCorpo" class="divide-y divide-slate-100 text-sm text-slate-700">
+                                <!-- Preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <!-- SUB-ABA B: BI GERENCIAL / DASHBOARD -->
+                <div id="subtab-bi" class="hidden space-y-6">
+                    <!-- Cards de KPIs -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-blue-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total de Solicitações</p>
+                                <h4 id="kpi-total" class="text-3xl font-extrabold text-blue-950 mt-1">0</h4>
+                            </div>
+                            <div class="bg-blue-100 text-blue-700 p-3 rounded-xl">📊</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-amber-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-amber-500 uppercase tracking-wider">Pendentes</p>
+                                <h4 id="kpi-pendente" class="text-3xl font-extrabold text-amber-600 mt-1">0</h4>
+                            </div>
+                            <div class="bg-amber-100 text-amber-700 p-3 rounded-xl">⏳</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-blue-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-blue-500 uppercase tracking-wider">Em Tratativa</p>
+                                <h4 id="kpi-tratativa" class="text-3xl font-extrabold text-blue-600 mt-1">0</h4>
+                            </div>
+                            <div class="bg-blue-100 text-blue-700 p-3 rounded-xl">⚙️</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-emerald-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Concluídas</p>
+                                <h4 id="kpi-concluido" class="text-3xl font-extrabold text-emerald-600 mt-1">0</h4>
+                            </div>
+                            <div class="bg-emerald-100 text-emerald-700 p-3 rounded-xl">✅</div>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos e Distribuições Analíticas -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Distribuição por Terapias -->
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-blue-100">
+                            <h4 class="font-bold text-slate-900 text-base mb-4 flex items-center space-x-2">
+                                <span>📈</span><span>Demanda por Tipo de Terapia</span>
+                            </h4>
+                            <div id="bi-terapias-chart" class="space-y-3">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Top Prestadores -->
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-blue-100">
+                            <h4 class="font-bold text-slate-900 text-base mb-4 flex items-center space-x-2">
+                                <span>🩺</span><span>Solicitações por Prestador</span>
+                            </h4>
+                            <div id="bi-prestadores-chart" class="space-y-3">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -244,6 +316,26 @@
             }
         }
 
+        function switchAdminSubTab(subtab) {
+            const tabTabela = document.getElementById('subtab-tabela');
+            const tabBi = document.getElementById('subtab-bi');
+            const btnTabela = document.getElementById('subbtn-tabela');
+            const btnBi = document.getElementById('subbtn-bi');
+
+            if (subtab === 'tabela') {
+                tabTabela.classList.remove('hidden');
+                tabBi.classList.add('hidden');
+                btnTabela.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm";
+                btnBi.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+            } else {
+                tabTabela.classList.add('hidden');
+                tabBi.classList.remove('hidden');
+                btnBi.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-blue-600 text-white shadow-sm";
+                btnTabela.className = "px-4 py-2 text-xs font-bold rounded-xl transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+                atualizarBI();
+            }
+        }
+
         async function enviarFormulario(event) {
             event.preventDefault();
 
@@ -258,7 +350,6 @@
             const observacoes = document.getElementById('observacoes').value;
             const fileInput = document.getElementById('arquivoAnexo');
 
-            // Capturar checkboxes marcados
             const checkboxes = document.querySelectorAll('input[name="terapia"]:checked');
             if (checkboxes.length === 0) {
                 alert('Por favor, selecione ao menos uma terapia.');
@@ -300,15 +391,8 @@
                     status: 'Pendente'
                 };
 
-                const { data, error } = await _supabase
-                    .from('solicitacoes_terapias')
-                    .insert([payload]);
-
-                if (error) {
-                    console.error("Detalhe do erro do Supabase:", error);
-                    alert('Erro ao enviar: ' + (error.message || 'Verifique o console.'));
-                    throw error;
-                }
+                const { error } = await _supabase.from('solicitacoes_terapias').insert([payload]);
+                if (error) throw error;
 
                 document.getElementById('solicitacaoForm').reset();
                 const successMsg = document.getElementById('successMessage');
@@ -316,6 +400,7 @@
                 setTimeout(() => successMsg.classList.add('hidden'), 5000);
             } catch (err) {
                 console.error("Erro capturado:", err);
+                alert('Erro ao enviar os dados.');
             } finally {
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = "Enviar Solicitação";
@@ -324,7 +409,6 @@
 
         function verificarSenhaAdmin(event) {
             if (event) event.preventDefault();
-            
             const senhaDigitada = document.getElementById('adminPasswordInput').value;
             const erroEl = document.getElementById('loginError');
 
@@ -349,6 +433,8 @@
                 alert('Erro ao atualizar o status.');
                 console.error(error);
                 carregarDadosSupabase();
+            } else {
+                carregarDadosSupabase();
             }
         }
 
@@ -362,7 +448,7 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase. Verifique a conexão.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase.</td></tr>`;
                 console.error(error);
                 return;
             }
@@ -371,6 +457,7 @@
 
             if (dadosGlobais.length === 0) {
                 tabelaCorpo.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
+                atualizarBI();
                 return;
             }
 
@@ -415,6 +502,76 @@
                 `;
                 tabelaCorpo.appendChild(linha);
             });
+
+            atualizarBI();
+        }
+
+        function atualizarBI() {
+            const total = dadosGlobais.length;
+            const pendentes = dadosGlobais.filter(i => (i.status || 'Pendente') === 'Pendente').length;
+            const tratativa = dadosGlobais.filter(i => i.status === 'Em tratativa').length;
+            const concluidos = dadosGlobais.filter(i => i.status === 'Concluido').length;
+
+            document.getElementById('kpi-total').innerText = total;
+            document.getElementById('kpi-pendente').innerText = pendentes;
+            document.getElementById('kpi-tratativa').innerText = tratativa;
+            document.getElementById('kpi-concluido').innerText = concluidos;
+
+            // Contar Terapias
+            const contadorTerapias = {};
+            dadosGlobais.forEach(item => {
+                if (item.terapia) {
+                    item.terapia.split(',').forEach(t => {
+                        const terapiaLimpa = t.trim();
+                        contadorTerapias[terapiaLimpa] = (contadorTerapias[terapiaLimpa] || 0) + 1;
+                    });
+                }
+            });
+
+            const biTerapiasDiv = document.getElementById('bi-terapias-chart');
+            biTerapiasDiv.innerHTML = '';
+            if (Object.keys(contadorTerapias).length === 0) {
+                biTerapiasDiv.innerHTML = '<p class="text-xs text-slate-400">Nenhum dado registrado.</p>';
+            } else {
+                for (const [terapia, qtd] of Object.entries(contadorTerapias)) {
+                    const porcentagem = total > 0 ? Math.round((qtd / total) * 100) : 0;
+                    biTerapiasDiv.innerHTML += `
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span class="text-slate-700">${terapia}</span>
+                                <span class="text-blue-600">${qtd} (${porcentagem}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: ${porcentagem}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Contar Prestadores
+            const contadorPrestadores = {};
+            dadosGlobais.forEach(item => {
+                if (item.nome_prestador) {
+                    const p = item.nome_prestador.trim();
+                    contadorPrestadores[p] = (contadorPrestadores[p] || 0) + 1;
+                }
+            });
+
+            const biPrestadoresDiv = document.getElementById('bi-prestadores-chart');
+            biPrestadoresDiv.innerHTML = '';
+            if (Object.keys(contadorPrestadores).length === 0) {
+                biPrestadoresDiv.innerHTML = '<p class="text-xs text-slate-400">Nenhum dado registrado.</p>';
+            } else {
+                for (const [prestador, qtd] of Object.entries(contadorPrestadores)) {
+                    biPrestadoresDiv.innerHTML += `
+                        <div class="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                            <span class="font-semibold text-slate-800">🩺 ${prestador}</span>
+                            <span class="bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded-lg">${qtd} solicitação(ões)</span>
+                        </div>
+                    `;
+                }
+            }
         }
 
         function exportarCSV() {
