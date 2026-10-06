@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Solicitações de Terapias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 min-h-screen text-slate-800 flex flex-col">
+
+    <!-- Header / Navegação -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-teal-100 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-teal-600 text-white p-2.5 rounded-xl shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-teal-900 leading-tight">Controle de Solicitações de Terapias</h1>
+                    <p class="text-xs text-teal-600 font-medium">Centro Clínico</p>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <button onclick="switchTab('form')" id="btn-form" class="px-4 py-2 text-sm font-semibold rounded-lg transition bg-teal-600 text-white shadow-sm">
+                    Novo Formulário
+                </button>
+                <button onclick="switchTab('admin')" id="btn-admin" class="px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    Área da Clínica (Painel)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-3xl mx-auto px-4 py-10 flex-grow w-full">
+
+        <!-- ABA 1: FORMULÁRIO DO PACIENTE -->
+        <div id="tab-form" class="bg-white rounded-2xl shadow-xl border border-teal-100 p-8 sm:p-10 transition-all duration-300">
+            <div class="border-b border-slate-100 pb-6 mb-8">
+                <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Canal do Paciente</span>
+                <h2 class="text-2xl font-bold text-slate-900 mt-2">Solicitação de Marcação de Terapias</h2>
+                <p class="text-sm text-slate-500 mt-1">Preencha os campos abaixo com atenção para solicitar seu procedimento.</p>
+            </div>
+
+            <form id="solicitacaoForm" onsubmit="enviarFormulario(event)" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">1. Nome completo do paciente *</label>
+                    <input type="text" id="nome" required placeholder="Insira sua resposta" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">2. Código da carteira do convênio *</label>
+                    <input type="text" id="convenio" required minlength="14" placeholder="Insira pelo menos 14 caracteres" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 transition">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">3. Telefone para contato 01 *</label>
+                        <input type="text" id="tel1" required placeholder="(00) 00000-0000" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">4. Telefone para contato 02</label>
+                        <input type="text" id="tel2" placeholder="(00) 00000-0000" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">5. E-mail *</label>
+                    <input type="email" id="email" required placeholder="seuemail@exemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">6. Qual terapia realizará? *</label>
+                    <div class="space-y-2.5">
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer transition">
+                            <input type="radio" name="terapia" value="Fisioterapia Motora" required class="text-teal-600 focus:ring-teal-500 h-4 w-4">
+                            <span class="ml-3 text-sm font-medium text-slate-700">Fisioterapia Motora</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer transition">
+                            <input type="radio" name="terapia" value="Fisioterapia Respiratória" class="text-teal-600 focus:ring-teal-500 h-4 w-4">
+                            <span class="ml-3 text-sm font-medium text-slate-700">Fisioterapia Respiratória</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer transition">
+                            <input type="radio" name="terapia" value="Fonoaudiologia" class="text-teal-600 focus:ring-teal-500 h-4 w-4">
+                            <span class="ml-3 text-sm font-medium text-slate-700">Fonoaudiologia</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer transition">
+                            <input type="radio" name="terapia" value="Terapia Ocupacional" class="text-teal-600 focus:ring-teal-500 h-4 w-4">
+                            <span class="ml-3 text-sm font-medium text-slate-700">Terapia Ocupacional</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer transition">
+                            <input type="radio" name="terapia" value="Psicologia" class="text-teal-600 focus:ring-teal-500 h-4 w-4">
+                            <span class="ml-3 text-sm font-medium text-slate-700">Psicologia</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">7. Senha de autorização do procedimento *</label>
+                    <input type="text" id="senha" required maxlength="9" placeholder="Insira no máximo 9 caracteres" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 transition">
+                </div>
+
+                <button type="submit" id="btnSubmit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-xl shadow-lg shadow-teal-600/30 transition duration-200 flex items-center justify-center space-x-2">
+                    <span>Enviar Solicitação</span>
+                </button>
+            </form>
+
+            <div id="successMessage" class="hidden mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-center font-medium">
+                ✅ Solicitação enviada com sucesso! Seus dados foram salvos na nuvem para análise da clínica.
+            </div>
+        </div>
+
+        <!-- ABA 2: PAINEL DA CLÍNICA (PROTEGIDO POR SENHA) -->
+        <div id="tab-admin" class="hidden space-y-6">
+            <!-- Tela de Login -->
+            <div id="admin-login" class="bg-white rounded-2xl shadow-xl border border-teal-100 p-8 max-w-md mx-auto text-center">
+                <div class="bg-teal-100 text-teal-800 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Acesso Restrito à Clínica</h3>
+                <p class="text-sm text-slate-500 mb-6">Insira a senha administrativa para visualizar as solicitações recebidas.</p>
+                <form onsubmit="verificarSenhaAdmin(event)" class="space-y-4">
+                    <input type="password" id="adminPasswordInput" required placeholder="Senha da clínica" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 text-center">
+                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl shadow transition">Entrar no Painel</button>
+                    <p id="loginError" class="text-xs text-rose-600 hidden font-medium">Senha incorreta. Tente novamente.</p>
+                </form>
+            </div>
+
+            <!-- Tabela de Dados (Visível após autenticação) -->
+            <div id="admin-content" class="hidden bg-white rounded-2xl shadow-xl border border-teal-100 p-6 overflow-hidden">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Planilha de Solicitações (Nuvem)</h3>
+                        <p class="text-xs text-slate-500">Dados sincronizados em tempo real via Supabase</p>
+                    </div>
+                    <button onclick="carregarDadosSupabase()" class="px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-lg text-sm font-semibold transition flex items-center space-x-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        <span>Atualizar</span>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
+                                <th class="p-3 font-semibold">Data/Hora</th>
+                                <th class="p-3 font-semibold">Paciente</th>
+                                <th class="p-3 font-semibold">Convênio</th>
+                                <th class="p-3 font-semibold">Contatos</th>
+                                <th class="p-3 font-semibold">E-mail</th>
+                                <th class="p-3 font-semibold">Terapia</th>
+                                <th class="p-3 font-semibold">Senha Autorização</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaCorpo" class="divide-y divide-slate-100 text-sm text-slate-700">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Configuração e Lógica JavaScript -->
+    <script>
+        // CONFIGURAÇÃO DO SUPABASE (Substitua pelas suas credenciais do projeto)
+        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE_AQUI';
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_DO_SUPABASE_AQUI';
+        
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Senha padrão para acessar a aba da clínica
+        const SENHA_CLINICA = 'clinica123';
+
+        function switchTab(tab) {
+            const formTab = document.getElementById('tab-form');
+            const adminTab = document.getElementById('tab-admin');
+            const btnForm = document.getElementById('btn-form');
+            const btnAdmin = document.getElementById('btn-admin');
+
+            if (tab === 'form') {
+                formTab.classList.remove('hidden');
+                adminTab.classList.add('hidden');
+                btnForm.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-teal-600 text-white shadow-sm";
+                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+            } else {
+                formTab.classList.add('hidden');
+                adminTab.classList.remove('hidden');
+                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-teal-600 text-white shadow-sm";
+                btnForm.className = "px-4 py-2 text-sm font-semibold rounded-lg transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+            }
+        }
+
+        async function enviarFormulario(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+            const convenio = document.getElementById('convenio').value;
+            const tel1 = document.getElementById('tel1').value;
+            const tel2 = document.getElementById('tel2').value;
+            const email = document.getElementById('email').value;
+            const terapia = document.querySelector('input[name="terapia"]:checked').value;
+            const senha = document.getElementById('senha').value;
+
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Enviando para a nuvem...";
+
+            // Inserir dados na tabela do Supabase
+            const { data, error } = await _supabase
+                .from('solicitacoes_terapias')
+                .insert([
+                    { 
+                        nome_paciente: nome, 
+                        convenio: convenio, 
+                        telefone1: tel1, 
+                        telefone2: tel2, 
+                        email: email, 
+                        terapia: terapia, 
+                        senha_autorizacao: senha 
+                    }
+                ]);
+
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = "Enviar Solicitação";
+
+            if (error) {
+                alert('Erro ao enviar os dados. Verifique a configuração do Supabase.');
+                console.error(error);
+                return;
+            }
+
+            document.getElementById('solicitacaoForm').reset();
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.remove('hidden');
+            setTimeout(() => successMsg.classList.add('hidden'), 5000);
+        }
+
+        function verificarSenhaAdmin(event) {
+            event.preventDefault();
+            const senhaDigitada = document.getElementById('adminPasswordInput').value;
+            const erroEl = document.getElementById('loginError');
+
+            if (senhaDigitada === SENHA_CLINICA) {
+                document.getElementById('admin-login').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                carregarDadosSupabase();
+            } else {
+                erroEl.classList.remove('hidden');
+            }
+        }
+
+        async function carregarDadosSupabase() {
+            const tabelaCorpo = document.getElementById('tabelaCorpo');
+            tabelaCorpo.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Carregando dados da nuvem...</td></tr>`;
+
+            const { data, error } = await _supabase
+                .from('solicitacoes_terapias')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                tabelaCorpo.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase.</td></tr>`;
+                console.error(error);
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                tabelaCorpo.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
+                return;
+            }
+
+            tabelaCorpo.innerHTML = '';
+            data.forEach(item => {
+                const dataFormatada = new Date(item.created_at).toLocaleString('pt-BR');
+                const linha = document.createElement('tr');
+                linha.className = "hover:bg-slate-50 transition border-b border-slate-100";
+                linha.innerHTML = `
+                    <td class="p-3 text-xs text-slate-500">${dataFormatada}</td>
+                    <td class="p-3 font-semibold text-slate-900">${item.nome_paciente}</td>
+                    <td class="p-3">${item.convenio}</td>
+                    <td class="p-3 text-xs">${item.telefone1} ${item.telefone2 ? '<br>' + item.telefone2 : ''}</td>
+                    <td class="p-3 text-xs text-slate-600">${item.email}</td>
+                    <td class="p-3"><span class="bg-teal-50 text-teal-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia}</span></td>
+                    <td class="p-3 font-mono text-xs font-bold text-slate-800">${item.senha_autorizacao}</td>
+                `;
+                tabelaCorpo.appendChild(linha);
+            });
+        }
+    </script>
+</body>
+</html>
