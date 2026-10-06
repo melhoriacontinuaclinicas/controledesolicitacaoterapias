@@ -15,7 +15,7 @@
 
     <!-- Header / Navegação -->
     <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-blue-100 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -39,10 +39,10 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-3xl mx-auto px-4 py-10 flex-grow w-full">
+    <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full">
 
         <!-- ABA 1: FORMULÁRIO DO PACIENTE -->
-        <div id="tab-form" class="bg-white rounded-2xl shadow-xl border border-blue-100 p-8 sm:p-10 transition-all duration-300">
+        <div id="tab-form" class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100 p-8 sm:p-10 transition-all duration-300">
             <div class="border-b border-slate-100 pb-6 mb-8">
                 <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Canal do Paciente</span>
                 <h2 class="text-2xl font-bold text-slate-900 mt-2">Solicitação de Marcação de Terapias</h2>
@@ -140,7 +140,7 @@
                 <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
                     <div>
                         <h3 class="text-xl font-bold text-slate-900">Planilha de Solicitações (Nuvem)</h3>
-                        <p class="text-xs text-slate-500">Dados sincronizados em tempo real via Supabase</p>
+                        <p class="text-xs text-slate-500">Dados e status sincronizados em tempo real via Supabase</p>
                     </div>
                     <button onclick="carregarDadosSupabase()" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-semibold transition flex items-center space-x-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
@@ -159,6 +159,7 @@
                                 <th class="p-3 font-semibold">E-mail</th>
                                 <th class="p-3 font-semibold">Terapia</th>
                                 <th class="p-3 font-semibold">Senha Autorização</th>
+                                <th class="p-3 font-semibold text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaCorpo" class="divide-y divide-slate-100 text-sm text-slate-700">
@@ -232,20 +233,19 @@
                             telefone2: tel2, 
                             email: email, 
                             terapia: terapiaElement.value, 
-                            senha_autorizacao: senha 
+                            senha_autorizacao: senha,
+                            status: 'Pendente'
                         }
                     ]);
 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
 
                 document.getElementById('solicitacaoForm').reset();
                 const successMsg = document.getElementById('successMessage');
                 successMsg.classList.remove('hidden');
                 setTimeout(() => successMsg.classList.add('hidden'), 5000);
             } catch (err) {
-                alert('Erro ao enviar os dados. Verifique se a tabela "solicitacoes_terapias" foi criada corretamente no Supabase.');
+                alert('Erro ao enviar os dados. Verifique a tabela no Supabase.');
                 console.error(err);
             } finally {
                 btnSubmit.disabled = false;
@@ -270,9 +270,22 @@
             return false;
         }
 
+        async function atualizarStatus(id, novoStatus) {
+            const { error } = await _supabase
+                .from('solicitacoes_terapias')
+                .update({ status: novoStatus })
+                .eq('id', id);
+
+            if (error) {
+                alert('Erro ao atualizar o status.');
+                console.error(error);
+                carregarDadosSupabase();
+            }
+        }
+
         async function carregarDadosSupabase() {
             const tabelaCorpo = document.getElementById('tabelaCorpo');
-            tabelaCorpo.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Carregando dados da nuvem...</td></tr>`;
+            tabelaCorpo.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Carregando dados da nuvem...</td></tr>`;
 
             const { data, error } = await _supabase
                 .from('solicitacoes_terapias')
@@ -280,19 +293,25 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase. Verifique a tabela e as permissões RLS.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase. Verifique a conexão.</td></tr>`;
                 console.error(error);
                 return;
             }
 
             if (!data || data.length === 0) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Nenhuma solicitação encontrada.</td></tr>`;
                 return;
             }
 
             tabelaCorpo.innerHTML = '';
             data.forEach(item => {
                 const dataFormatada = new Date(item.created_at).toLocaleString('pt-BR');
+                const statusAtual = item.status || 'Pendente';
+                
+                let selectBg = 'bg-amber-50 text-amber-700 border-amber-200';
+                if (statusAtual === 'Em tratativa') selectBg = 'bg-blue-50 text-blue-700 border-blue-200';
+                if (statusAtual === 'Concluido') selectBg = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+
                 const linha = document.createElement('tr');
                 linha.className = "hover:bg-slate-50 transition border-b border-slate-100";
                 linha.innerHTML = `
@@ -303,6 +322,14 @@
                     <td class="p-3 text-xs text-slate-600">${item.email}</td>
                     <td class="p-3"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia}</span></td>
                     <td class="p-3 font-mono text-xs font-bold text-slate-800">${item.senha_autorizacao}</td>
+                    <td class="p-3 text-center">
+                        <select onchange="atualizarStatus('${item.id}', this.value); this.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border focus:outline-none transition ' + (this.value === 'Concluido' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : this.value === 'Em tratativa' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-amber-50 text-amber-700 border-amber-200')" 
+                            class="text-xs font-bold px-3 py-1.5 rounded-lg border focus:outline-none transition ${selectBg}">
+                            <option value="Pendente" ${statusAtual === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                            <option value="Em tratativa" ${statusAtual === 'Em tratativa' ? 'selected' : ''}>Em tratativa</option>
+                            <option value="Concluido" ${statusAtual === 'Concluido' ? 'selected' : ''}>Concluído</option>
+                        </select>
+                    </td>
                 `;
                 tabelaCorpo.appendChild(linha);
             });
