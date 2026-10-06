@@ -15,7 +15,7 @@
 
     <!-- Header / Navegação -->
     <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-blue-100 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -38,11 +38,11 @@
         </div>
     </header>
 
-    <!-- Conteúdo Principal -->
-    <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full">
+    <!-- Conteúdo Principal Ampliado -->
+    <main class="max-w-7xl mx-auto px-6 py-10 flex-grow w-full">
 
         <!-- ABA 1: FORMULÁRIO DO PACIENTE -->
-        <div id="tab-form" class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100 p-8 sm:p-10 transition-all duration-300">
+        <div id="tab-form" class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100 p-8 sm:p-12 transition-all duration-300">
             <div class="border-b border-slate-100 pb-6 mb-8">
                 <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Canal do Paciente</span>
                 <h2 class="text-2xl font-bold text-slate-900 mt-2">Solicitação de Marcação de Terapias</h2>
@@ -104,7 +104,7 @@
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Quais terapias deseja solicitar? (Marque uma ou mais) *</label>
-                        <div class="space-y-2.5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 cursor-pointer transition">
                                 <input type="checkbox" name="terapia" value="Psicologia" class="text-blue-600 focus:ring-blue-500 h-4 w-4 rounded">
                                 <span class="ml-3 text-sm font-medium text-slate-700">Psicologia</span>
@@ -173,7 +173,7 @@
             </div>
 
             <!-- Tabela de Dados (Visível após autenticação) -->
-            <div id="admin-content" class="hidden bg-white rounded-2xl shadow-xl border border-blue-100 p-6 overflow-hidden">
+            <div id="admin-content" class="hidden bg-white rounded-2xl shadow-xl border border-blue-100 p-6 overflow-hidden w-full">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
                     <div>
                         <h3 class="text-xl font-bold text-slate-900">Planilha de Solicitações (Nuvem)</h3>
@@ -191,19 +191,19 @@
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto w-full">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-                                <th class="p-3 font-semibold">Enviado em</th>
-                                <th class="p-3 font-semibold">Beneficiário</th>
-                                <th class="p-3 font-semibold">Carteirinha</th>
-                                <th class="p-3 font-semibold">Contatos / E-mail</th>
-                                <th class="p-3 font-semibold">Consulta / Prestador / Local</th>
-                                <th class="p-3 font-semibold">Terapias</th>
-                                <th class="p-3 font-semibold">Observações</th>
-                                <th class="p-3 font-semibold">Anexo</th>
-                                <th class="p-3 font-semibold text-center">Status</th>
+                                <th class="p-3.5 font-semibold">Enviado em</th>
+                                <th class="p-3.5 font-semibold">Beneficiário</th>
+                                <th class="p-3.5 font-semibold">Carteirinha</th>
+                                <th class="p-3.5 font-semibold">Contatos / E-mail</th>
+                                <th class="p-3.5 font-semibold">Consulta / Prestador / Local</th>
+                                <th class="p-3.5 font-semibold">Terapias</th>
+                                <th class="p-3.5 font-semibold">Observações</th>
+                                <th class="p-3.5 font-semibold">Anexo</th>
+                                <th class="p-3.5 font-semibold text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaCorpo" class="divide-y divide-slate-100 text-sm text-slate-700">
@@ -387,25 +387,24 @@
                 if (item.anexo_nome && item.anexo_dados) {
                     anexoHtml = `<a href="${item.anexo_dados}" download="${item.anexo_nome}" class="text-blue-600 hover:underline text-xs font-semibold flex items-center space-x-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
-                        <span class="truncate max-w-[100px]" title="${item.anexo_nome}">${item.anexo_nome}</span>
+                        <span class="truncate max-w-[120px]" title="${item.anexo_nome}">${item.anexo_nome}</span>
                     </a>`;
                 }
 
-                // Formatar data da consulta se existir
                 let dataConsultaFmt = item.data_consulta ? item.data_consulta.split('-').reverse().join('/') : '-';
 
                 const linha = document.createElement('tr');
                 linha.className = "hover:bg-slate-50 transition border-b border-slate-100";
                 linha.innerHTML = `
-                    <td class="p-3 text-xs text-slate-500">${dataFormatada}</td>
-                    <td class="p-3 font-semibold text-slate-900">${item.nome_paciente}</td>
-                    <td class="p-3">${item.convenio}</td>
-                    <td class="p-3 text-xs">${item.telefone1} ${item.telefone2 ? '<br>' + item.telefone2 : ''}<br><span class="text-slate-500">${item.email}</span></td>
-                    <td class="p-3 text-xs">📅 ${dataConsultaFmt}<br>🩺 ${item.nome_prestador || '-'}<br>📍 ${item.local_marcacao || '-'}</td>
-                    <td class="p-3"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia || '-'}</span></td>
-                    <td class="p-3 text-xs text-slate-600 max-w-[150px] truncate" title="${item.observacoes || ''}">${item.observacoes || '-'}</td>
-                    <td class="p-3">${anexoHtml}</td>
-                    <td class="p-3 text-center">
+                    <td class="p-3.5 text-xs text-slate-500">${dataFormatada}</td>
+                    <td class="p-3.5 font-semibold text-slate-900">${item.nome_paciente}</td>
+                    <td class="p-3.5">${item.convenio}</td>
+                    <td class="p-3.5 text-xs">${item.telefone1} ${item.telefone2 ? '<br>' + item.telefone2 : ''}<br><span class="text-slate-500">${item.email}</span></td>
+                    <td class="p-3.5 text-xs">📅 ${dataConsultaFmt}<br>🩺 ${item.nome_prestador || '-'}<br>📍 ${item.local_marcacao || '-'}</td>
+                    <td class="p-3.5"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-semibold">${item.terapia || '-'}</span></td>
+                    <td class="p-3.5 text-xs text-slate-600 max-w-[180px] truncate" title="${item.observacoes || ''}">${item.observacoes || '-'}</td>
+                    <td class="p-3.5">${anexoHtml}</td>
+                    <td class="p-3.5 text-center">
                         <select onchange="atualizarStatus('${item.id}', this.value)" 
                             class="text-xs font-bold px-3 py-1.5 rounded-lg border focus:outline-none transition ${selectBg}">
                             <option value="Pendente" ${statusAtual === 'Pendente' ? 'selected' : ''}>Pendente</option>
