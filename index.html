@@ -277,8 +277,8 @@
 
     <!-- Configuração e Lógica JavaScript -->
     <script>
-        const SUPABASE_URL = 'https://hzntjcroqleohwvicxbc.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_7fHdZ8LFufkC669QNkLVXw_QlTzzSEN';
+        const SUPABASE_URL = 'https://uwcskbqwdeuitflfenpd.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_Ga9xq3EscJZYadHVWf5sgA_1YC09T_2';
         
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const SENHA_CLINICA = 'clinica123';
@@ -393,7 +393,7 @@
                 setTimeout(() => successMsg.classList.add('hidden'), 5000);
             } catch (err) {
                 console.error("Erro capturado:", err);
-                alert('Erro ao enviar os dados.');
+                alert('Erro ao enviar os dados. Verifique se a tabela "solicitacoes_terapias" foi criada corretamente no Supabase.');
             } finally {
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = "Enviar Solicitação";
@@ -453,7 +453,7 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase.</td></tr>`;
+                tabelaCorpo.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-rose-500 font-medium">Erro ao carregar dados do Supabase. Verifique a tabela "solicitacoes_terapias".</td></tr>`;
                 console.error(error);
                 return;
             }
